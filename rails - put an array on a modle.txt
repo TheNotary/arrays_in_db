@@ -1,0 +1,62 @@
+
+Problem:  You want to have something like
+
+[code]
+u = User.first
+u.courses
+=> [ "Yatting", "Fencing", "Drag Racing", "Properly Taught Statistics", "Ruby Reloaded!" ]
+
+Well, how do you do that?  Let's create an example app!
+
+
+Solution:
+
+1)  Create the models and things
+2)  Fill in the associations on the model scripts and maybe some basic data
+3)  
+
+
+1)  Create the models and things
+
+[code]
+$  rails new model_collection_test
+$  cd model_collection_test
+
+$  rails generate scaffold user
+$  rails generate model course content:string user_id:integer
+$  rails generate model users_courses 
+[/code]
+
+
+
+2)  Fill in the associations on the model scripts
+
+(app/models/course.rb)
+[code]
+class Course < ActiveRecord::Base
+  belongs_to :user
+  attr_accessor :courses
+  
+  def all
+    return @courses
+  end
+end
+[/code]
+
+(app/models/user.rb)
+[code]
+class User < ActiveRecord::Base
+  has_many :courses
+end
+[/code]
+
+(app/models/users_courses.rb)
+[code]
+class UsersCourses < ActiveRecord::Base
+  belongs_to :user
+  belongs_to :course
+end
+[/code]
+
+
+
