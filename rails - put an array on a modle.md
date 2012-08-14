@@ -34,8 +34,7 @@ You need to store a new ActiveRecord model collection on your currently existing
 
 2)  Fill in the associations on the model scripts
 
-####(app/models/course.rb)####
-
+#####(app/models/course.rb)#####
     class Course < ActiveRecord::Base
       belongs_to :user
     end
@@ -53,7 +52,7 @@ You need to store a new ActiveRecord model collection on your currently existing
 
 Change the user model to look like this:
 
-(app/models/user.rb)
+#####(app/models/user.rb)#####
 
     class User < ActiveRecord::Base
       has_many :courses
@@ -94,7 +93,7 @@ Ok, see there?  We couldn't just name it plain old "courses" because that name i
 
 So now let's impliment a setter so we can create these special records with out having to think about active record at all =D
 
-(app/models/user.rb)
+#####(app/models/user.rb)#####
 
     class User < ActiveRecord::Base
       has_many :courses
@@ -117,26 +116,27 @@ So now let's impliment a setter so we can create these special records with out 
 
 Now we want to be able to push more courses onto a user object.  
 
-[code]
-class User < ActiveRecord::Base
-  has_many :courses
-  
-  def enrollment
-    courses = self.courses
-    name_array = courses.map { |course| course.name }
-    
-    return name_array
-  end
-  
-  def enrollment=(val)
-    self.courses.delete_all
-    self.courses.create!(:name => val)
-  end
-  
-  # FAIL
-  def enrollment+=(val)
-    puts "hello"
-  end
-end
-[/code]
+#####(app/models/user.rb)#####
+
+    class User < ActiveRecord::Base
+      has_many :courses
+      
+      def enrollment
+        courses = self.courses
+        name_array = courses.map { |course| course.name }
+        
+        return name_array
+      end
+      
+      def enrollment=(val)
+        self.courses.delete_all
+        self.courses.create!(:name => val)
+      end
+      
+      # FAIL
+      def enrollment+=(val)
+        puts "hello"
+      end
+    end
+
 
