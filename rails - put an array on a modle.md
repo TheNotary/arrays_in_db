@@ -66,9 +66,7 @@ Change the user model to look like this:
       end
     end
 
-
-Ok, see there?  We couldn't just name it plain old "courses" because that name is taken by the ActiveRecord name "course.rb" which translates to "Courses" when you ascribe the has_many relationship.  But this is still pretty cool, right?  We just used a basic getter.  Now let's play with it in the console!  Afterwards we can impliment a setter method!!!
-
+Ok, see there?  We couldn't just name it plain old "courses" because that name is taken by the ActiveRecord name "course.rb" which translates to "Courses" when you ascribe the has_many relationship.  But this is still pretty cool, right?  We just implimented a basic getter.  Now let's play with it in the console!  Afterwards we can impliment a setter method!!!
 
     $  rails console
 
@@ -87,9 +85,7 @@ Ok, see there?  We couldn't just name it plain old "courses" because that name i
      => ["Ruby Reloaded!"]
 
 
-
-
-So now let's impliment a setter so we can create these special records with out having to think about active record at all =D
+So now let's impliment a setter so we can create these special records without having to think about active record at all =D
 
 #####(app/models/user.rb)#####
     class User < ActiveRecord::Base
