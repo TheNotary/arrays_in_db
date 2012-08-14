@@ -2,9 +2,9 @@
 Problem:  You want to have something like
 
 [code]
-	u = User.first
-	u.courses
-	=> [ "Yatting", "Fencing", "Drag Racing", "Properly Taught Statistics", "Ruby Reloaded!" ]
+    u = User.first
+    u.courses
+    => [ "Yatting", "Fencing", "Drag Racing", "Properly Taught Statistics", "Ruby Reloaded!" ]
 [/code]
 
 Well, how do you do that?  Let's create an example app!
