@@ -21,32 +21,32 @@ You need to store a new ActiveRecord model collection on your currently existing
 
 1)  Create the models and things
 
-[code]
-$  rails new model_collection_test
-$  cd model_collection_test
 
-$  rails generate scaffold user
-$  rails generate model course name:string user_id:integer
-$  rails generate model users_courses user_id:integer course_id:integer
-[/code]
+    $  rails new model_collection_test
+    $  cd model_collection_test
+
+    $  rails generate scaffold user
+    $  rails generate model course name:string user_id:integer
+    $  rails generate model users_courses user_id:integer course_id:integer
+
 
 
 
 2)  Fill in the associations on the model scripts
 
 (app/models/course.rb)
-[code]
-class Course < ActiveRecord::Base
-  belongs_to :user
-end
-[/code]
+
+    class Course < ActiveRecord::Base
+      belongs_to :user
+    end
+
 
 (app/models/user.rb)
-[code]
-class User < ActiveRecord::Base
-  has_many :courses
-end
-[/code]
+
+    class User < ActiveRecord::Base
+      has_many :courses
+    end
+
 
 
 3)  Now We need to make it so we can pull an array of course names out of the user model.  
@@ -54,64 +54,64 @@ end
 Change the user model to look like this:
 
 (app/models/user.rb)
-[code]
-class User < ActiveRecord::Base
-  has_many :courses
-  
-  # We need this function which will convert all 
-  # the ActiveRecord "course" objects owned by this user into an array of 
-  # these course's names.  (eew... what an ugly English sentence =/).  
-  def enrollment
-    courses = self.courses
-    name_array = courses.map { |course| course.name }
-    
-    return name_array
-  end
-end
-[/code]
+
+    class User < ActiveRecord::Base
+      has_many :courses
+      
+      # We need this function which will convert all 
+      # the ActiveRecord "course" objects owned by this user into an array of 
+      # these course's names.  (eew... what an ugly English sentence =/).  
+      def enrollment
+        courses = self.courses
+        name_array = courses.map { |course| course.name }
+        
+        return name_array
+      end
+    end
+
 
 Ok, see there?  We couldn't just name it plain old "courses" because that name is taken by the ActiveRecord name "course.rb" which translates to "Courses" when you ascribe the has_many relationship.  But this is still pretty cool, right?  We just used a basic getter.  Now let's play with it in the console!  Afterwards we can impliment a setter method!!!
 
-[code]
-$  rails console
 
-Loading development environment (Rails 3.0.9)
+    $  rails console
 
-> u = User.create
- => #<User id: 3, created_at: "2012-08-12 15:10:20", updated_at: "2012-08-12 15:10:20">
+    Loading development environment (Rails 3.0.9)
 
-> u.courses.create(:name => "Ruby Reloaded!")
- => #<Course id: 4, created_at: "2012-08-12 15:10:38", updated_at: "2012-08-12 15:10:38", user_id: 3, courses: nil, name: "Ruby Reloaded!">
+    > u = User.create
+     => #<User id: 3, created_at: "2012-08-12 15:10:20", updated_at: "2012-08-12 15:10:20">
 
-> u.courses
- => [#<Course id: 4, created_at: "2012-08-12 15:10:38", updated_at: "2012-08-12 15:10:38", user_id: 3, courses: nil, name: "Ruby Reloaded!">]
+    > u.courses.create(:name => "Ruby Reloaded!")
+     => #<Course id: 4, created_at: "2012-08-12 15:10:38", updated_at: "2012-08-12 15:10:38", user_id: 3, courses: nil, name: "Ruby Reloaded!">
 
-> u.enrollment
- => ["Ruby Reloaded!"]
-[/code]
+    > u.courses
+     => [#<Course id: 4, created_at: "2012-08-12 15:10:38", updated_at: "2012-08-12 15:10:38", user_id: 3, courses: nil, name: "Ruby Reloaded!">]
+
+    > u.enrollment
+     => ["Ruby Reloaded!"]
+
 
 
 
 So now let's impliment a setter so we can create these special records with out having to think about active record at all =D
 
 (app/models/user.rb)
-[code]
-class User < ActiveRecord::Base
-  has_many :courses
-  
-  def enrollment
-    courses = self.courses
-    name_array = courses.map { |course| course.name }
-    
-    return name_array
-  end
-  
-  def enrollment=(val)
-    self.courses.delete_all
-    self.courses.create!(:name => val)
-  end
-end
-[/code]
+
+    class User < ActiveRecord::Base
+      has_many :courses
+      
+      def enrollment
+        courses = self.courses
+        name_array = courses.map { |course| course.name }
+        
+        return name_array
+      end
+      
+      def enrollment=(val)
+        self.courses.delete_all
+        self.courses.create!(:name => val)
+      end
+    end
+
 
 
 
