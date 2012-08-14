@@ -114,7 +114,6 @@ So now let's impliment a setter so we can create these special records with out 
 Now we want to be able to push more courses onto a user object.  
 
 #####(app/models/user.rb)#####
-<pre>
     class User < ActiveRecord::Base
       has_many :courses
       
@@ -135,5 +134,5 @@ Now we want to be able to push more courses onto a user object.
         puts "hello"
       end
     end
-</pre>
+
 
