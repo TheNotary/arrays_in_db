@@ -41,7 +41,6 @@ You need to store a new ActiveRecord model collection on your currently existing
 
 
 #####(app/models/user.rb)#####
-
     class User < ActiveRecord::Base
       has_many :courses
     end
@@ -53,7 +52,6 @@ You need to store a new ActiveRecord model collection on your currently existing
 Change the user model to look like this:
 
 #####(app/models/user.rb)#####
-
     class User < ActiveRecord::Base
       has_many :courses
       
@@ -94,7 +92,6 @@ Ok, see there?  We couldn't just name it plain old "courses" because that name i
 So now let's impliment a setter so we can create these special records with out having to think about active record at all =D
 
 #####(app/models/user.rb)#####
-
     class User < ActiveRecord::Base
       has_many :courses
       
@@ -117,7 +114,6 @@ So now let's impliment a setter so we can create these special records with out 
 Now we want to be able to push more courses onto a user object.  
 
 #####(app/models/user.rb)#####
-
     class User < ActiveRecord::Base
       has_many :courses
       
