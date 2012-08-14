@@ -12,9 +12,11 @@ Well, how do you do that?  Let's create an example app!
 
 Solution:
 
+You need to store a new ActiveRecord model collection on your currently existing User ActiveRecord model.  Then in your database seeding script, you can set the proper courses of each user as they are created, OR make it so they can add courses to their own model.  
+
 1)  Create the models and things
-2)  Fill in the associations on the model scripts and maybe some basic data
-3)  
+2)  Fill in the associations on the model scripts
+3)  Fill in the magic, so we can address courses as though it's just an array of names!
 
 
 1)  Create the models and things
@@ -24,8 +26,8 @@ $  rails new model_collection_test
 $  cd model_collection_test
 
 $  rails generate scaffold user
-$  rails generate model course content:string user_id:integer
-$  rails generate model users_courses 
+$  rails generate model course name:string user_id:integer
+$  rails generate model users_courses user_id:integer course_id:integer
 [/code]
 
 
@@ -36,11 +38,6 @@ $  rails generate model users_courses
 [code]
 class Course < ActiveRecord::Base
   belongs_to :user
-  attr_accessor :courses
-  
-  def all
-    return @courses
-  end
 end
 [/code]
 
@@ -51,11 +48,68 @@ class User < ActiveRecord::Base
 end
 [/code]
 
-(app/models/users_courses.rb)
+
+3)  Now We need to make it so we can pull an array of course names out of the user model.  
+
+Change the user model to look like this:
+
+(app/models/user.rb)
 [code]
-class UsersCourses < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :course
+class User < ActiveRecord::Base
+  has_many :courses
+  
+  # We need this function which will convert all 
+  # the ActiveRecord "course" objects owned by this user into an array of 
+  # these course's names.  (eew... what an ugly English sentence =/).  
+  def enrollment
+    courses = self.courses
+    name_array = courses.map { |course| course.name }
+    
+    return name_array
+  end
+end
+[/code]
+
+Ok, see there?  We couldn't just name it plain old "courses" because that name is taken by the ActiveRecord name "course.rb" which translates to "Courses" when you ascribe the has_many relationship.  But this is still pretty cool, right?  We just used a basic getter.  Now let's play with it in the console!  Afterwards we can impliment a setter method!!!
+
+[code]
+$  rails console
+
+Loading development environment (Rails 3.0.9)
+
+> u = User.create
+ => #<User id: 3, created_at: "2012-08-12 15:10:20", updated_at: "2012-08-12 15:10:20">
+
+> u.courses.create(:name => "Ruby Reloaded!")
+ => #<Course id: 4, created_at: "2012-08-12 15:10:38", updated_at: "2012-08-12 15:10:38", user_id: 3, courses: nil, name: "Ruby Reloaded!">
+
+> u.courses
+ => [#<Course id: 4, created_at: "2012-08-12 15:10:38", updated_at: "2012-08-12 15:10:38", user_id: 3, courses: nil, name: "Ruby Reloaded!">]
+
+> u.enrollment
+ => ["Ruby Reloaded!"]
+[/code]
+
+
+
+So now let's impliment a setter so we can create these special records with out having to think about active record at all =D
+
+(app/models/user.rb)
+[code]
+class User < ActiveRecord::Base
+  has_many :courses
+  
+  def enrollment
+    courses = self.courses
+    name_array = courses.map { |course| course.name }
+    
+    return name_array
+  end
+  
+  # FAIL
+  def enrollment+=(val
+    puts "hello"
+  end
 end
 [/code]
 
