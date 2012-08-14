@@ -34,14 +34,14 @@ You need to store a new ActiveRecord model collection on your currently existing
 
 2)  Fill in the associations on the model scripts
 
-(app/models/course.rb)
+#####(app/models/course.rb)#####
 
     class Course < ActiveRecord::Base
       belongs_to :user
     end
 
 
-(app/models/user.rb)
+#####(app/models/user.rb)#####
 
     class User < ActiveRecord::Base
       has_many :courses
