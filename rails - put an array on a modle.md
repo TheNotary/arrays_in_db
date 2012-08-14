@@ -106,12 +106,37 @@ class User < ActiveRecord::Base
     return name_array
   end
   
-  # FAIL
-  def enrollment+=(val
-    puts "hello"
+  def enrollment=(val)
+    self.courses.delete_all
+    self.courses.create!(:name => val)
   end
 end
 [/code]
 
 
+
+Now we want to be able to push more courses onto a user object.  
+
+[code]
+class User < ActiveRecord::Base
+  has_many :courses
+  
+  def enrollment
+    courses = self.courses
+    name_array = courses.map { |course| course.name }
+    
+    return name_array
+  end
+  
+  def enrollment=(val)
+    self.courses.delete_all
+    self.courses.create!(:name => val)
+  end
+  
+  # FAIL
+  def enrollment+=(val)
+    puts "hello"
+  end
+end
+[/code]
 
